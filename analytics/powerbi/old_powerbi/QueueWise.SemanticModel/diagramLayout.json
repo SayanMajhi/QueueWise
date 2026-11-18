@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 136.04568819788369
+          },
+          "nodeIndex": "CounterDays",
+          "nodeLineageTag": "bee5ff9e-b2a6-4abe-9c0e-ee901235f784",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 188.33623835368996,
+            "y": 0
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "2ae27be6-2cd7-4468-80c5-f1ba3182b8ec",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 116.92616050089535,
+            "y": 554.221267801168
+          },
+          "nodeIndex": "Counters",
+          "nodeLineageTag": "70192b70-1ca3-4f4a-9b9b-772e051ad4c3",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 470.6149222474246,
+            "y": 442.32235534388758
+          },
+          "nodeIndex": "Services",
+          "nodeLineageTag": "ebbbba94-d1a6-4e29-bbbc-7b469f0687ee",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 489.92552439576491,
+            "y": 28.957353134810205
+          },
+          "nodeIndex": "Tokens",
+          "nodeLineageTag": "c60c3c70-69ab-44ac-bbfb-d0e43c4dc158",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

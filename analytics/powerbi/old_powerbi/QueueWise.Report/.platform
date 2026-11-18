@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "QueueWise"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "80965a4b-7bdd-4f4d-aa77-ff74d3dbbc15"
+  }
+}

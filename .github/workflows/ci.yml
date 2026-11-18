@@ -1,0 +1,136 @@
+name: QueueWise CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    # Disposable credentials for this isolated service container.
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: '3306'
+      MYSQL_DATABASE: queuewise_ci_test
+      MYSQL_USER: queuewise_ci
+      MYSQL_PASSWORD: queuewise_ci_database_only
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: queuewise_ci_test
+          MYSQL_USER: queuewise_ci
+          MYSQL_PASSWORD: queuewise_ci_database_only
+          MYSQL_ROOT_PASSWORD: queuewise_ci_root_only
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --host=127.0.0.1"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          npm --prefix backend ci
+          npm --prefix frontend ci
+
+      - name: Apply database migrations
+        run: npm --prefix backend run db:migrate
+
+      - name: Run backend and API integration tests
+        env:
+          QUEUEWISE_TEST_DB: '1'
+        run: npm --prefix backend test
+
+      - name: Load synthetic demo data
+        run: |
+          DEMO_PASSWORD=$(node -p "require('node:crypto').randomBytes(24).toString('hex')")
+          export DEMO_PASSWORD
+          node backend/src/seed.js
+
+      - name: Verify SQL constraints and reporting metrics
+        env:
+          MYSQL_CONTAINER: ${{ job.services.mysql.id }}
+        run: |
+          for file in database/tests/constraints.sql database/tests/demo.sql \
+                      analytics/validation/reporting.sql analytics/validation/eta_accuracy.sql; do
+            echo "Running $file"
+            docker exec -i "$MYSQL_CONTAINER" sh -ec '
+              export MYSQL_PWD="$MYSQL_PASSWORD"
+              exec mysql --protocol=TCP -h 127.0.0.1 -u "$MYSQL_USER" "$MYSQL_DATABASE"
+            ' < "$file"
+          done
+
+      - name: Build production frontend
+        run: npm --prefix frontend run build
+
+      - name: Audit production dependencies
+        run: |
+          npm --prefix backend audit --omit=dev
+          npm --prefix frontend audit --omit=dev
+
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      MYSQL_DATABASE: queuewise_browser_test
+      MYSQL_USER: queuewise_ci
+      MYSQL_PASSWORD: queuewise_ci_database_only
+      MYSQL_ROOT_PASSWORD: queuewise_ci_root_only
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: tests/e2e/package-lock.json
+
+      - name: Install browser test dependencies
+        working-directory: tests/e2e
+        run: |
+          npm ci
+          npm exec -- playwright-core install --with-deps chromium
+
+      - name: Build and start the packaged application
+        run: docker compose up -d --build --wait
+
+      - name: Load demo data and verify browser workflows
+        run: |
+          DEMO_PASSWORD=$(node -p "require('node:crypto').randomBytes(24).toString('hex')")
+          export DEMO_PASSWORD
+          printf '::add-mask::%s\n' "$DEMO_PASSWORD"
+          printf '%s\n' "$DEMO_PASSWORD" | docker compose exec -T app sh -c '
+            IFS= read -r DEMO_PASSWORD
+            export DEMO_PASSWORD
+            exec node backend/src/seed.js
+          '
+          npm --prefix tests/e2e test
+
+      - name: Stop the disposable stack
+        if: always()
+        run: docker compose down --volumes

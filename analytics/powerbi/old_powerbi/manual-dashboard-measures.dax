@@ -1,0 +1,26 @@
+// Create each measure separately with Modeling > New measure.
+// These names match the views loaded using Get data > MySQL database.
+
+Tokens Issued =
+COALESCE(COUNTROWS('vw_token_lifecycle'), 0)
+
+Tokens Completed =
+CALCULATE([Tokens Issued], 'vw_token_lifecycle'[status] = "COMPLETED")
+
+Completion Rate =
+DIVIDE([Tokens Completed], [Tokens Issued])
+
+Average Wait Minutes =
+DIVIDE(AVERAGE('vw_token_lifecycle'[wait_seconds]), 60)
+
+Average Service Minutes =
+DIVIDE(AVERAGE('vw_token_lifecycle'[handling_seconds]), 60)
+
+Counter Completed Tokens =
+COALESCE(SUM('vw_counter_performance'[completed_tokens]), 0)
+
+Counter Utilization =
+DIVIDE(
+    SUM('vw_counter_performance'[busy_seconds]),
+    SUM('vw_counter_performance'[staffed_seconds])
+)

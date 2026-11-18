@@ -1,0 +1,57 @@
+x-app: &app
+  image: queuewise-app:local
+  build:
+    context: .
+  environment:
+    MYSQL_HOST: db
+    MYSQL_PORT: 3306
+    MYSQL_DATABASE: ${MYSQL_DATABASE:-queuewise}
+    MYSQL_USER: ${MYSQL_USER:-queuewise}
+    MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    API_HOST: 0.0.0.0
+    API_PORT: 3000
+    FRONTEND_DIR: /app/frontend/dist
+
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-queuewise}
+      MYSQL_USER: ${MYSQL_USER:-queuewise}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - queuewise_mysql_data:/var/lib/mysql
+      - ./database:/queuewise/database:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$MYSQL_PASSWORD\" mysql --protocol=TCP -h 127.0.0.1 -u \"$$MYSQL_USER\" \"$$MYSQL_DATABASE\" -Nse 'SELECT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    <<: *app
+    command: ["node", "backend/src/migrate.js"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    <<: *app
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+
+volumes:
+  queuewise_mysql_data:

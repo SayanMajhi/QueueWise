@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">QueueWise system design</title>
+  <desc id="desc">Students, staff and administrators use React in a browser. Express serves the website and writes queue operations to MySQL. Standalone Power BI Desktop imports read-only reporting views on refresh.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#716b60"/></marker>
+  </defs>
+  <style>
+    text{font-family:Inter,Arial,sans-serif;fill:#211f1b}
+    .kicker{font-size:16px;font-weight:700;letter-spacing:2px;fill:#f0c928}
+    .title{font-size:42px;font-weight:700;fill:#fffdfa}
+    .group{font-size:16px;font-weight:700;letter-spacing:1px;fill:#625c52}
+    .name{font-size:22px;font-weight:700}
+    .body{font-size:17px;fill:#625c52}
+    .box{fill:#fffdfa;stroke:#d8cebd;stroke-width:2}
+    .arrow{fill:none;stroke:#716b60;stroke-width:2;marker-end:url(#arrow)}
+  </style>
+  <rect width="1200" height="720" fill="#f6f1e9"/>
+  <path d="M0 0h1200v122H0z" fill="#171715"/>
+  <text class="kicker" x="48" y="43">QUEUEWISE / END-TO-END FLOW</text>
+  <text class="title" x="48" y="93">System design</text>
+
+  <rect x="358" y="164" width="794" height="319" rx="16" fill="#eee7dc" stroke="#d8cebd"/>
+  <text class="group" x="382" y="197">LOCAL DOCKER COMPOSE STACK</text>
+  <text class="group" x="48" y="197">BROWSER</text>
+  <rect class="box" x="48" y="230" width="248" height="140" rx="12"/>
+  <rect x="48" y="230" width="7" height="140" rx="3" fill="#f0c928"/>
+  <text class="name" x="68" y="268">React frontend</text>
+  <text class="body" x="68" y="303">Student · Staff · Admin</text>
+  <text class="body" x="68" y="333">Forms and queue updates</text>
+
+  <rect class="box" x="382" y="230" width="316" height="140" rx="12"/>
+  <text class="name" x="404" y="268">Express / Node.js</text>
+  <text class="body" x="404" y="303">Serves React and the JSON API</text>
+  <text class="body" x="404" y="333">Checks sessions and queue rules</text>
+
+  <rect x="775" y="230" width="353" height="140" rx="12" fill="#fff8dd" stroke="#aa8424" stroke-width="2"/>
+  <text class="name" x="798" y="268">MySQL 8.4</text>
+  <text class="body" x="798" y="303">Users · counters · tokens · events</text>
+  <text class="body" x="798" y="333">Data persists in a Docker volume</text>
+
+  <path class="arrow" d="M296 300H382"/>
+  <path class="arrow" d="M698 300H775"/>
+  <text class="body" x="337" y="285" text-anchor="middle">API</text>
+  <text class="body" x="736" y="285" text-anchor="middle">SQL</text>
+  <text class="body" x="382" y="417">Startup: MySQL becomes healthy → migration job applies schema → app starts.</text>
+  <text class="body" x="382" y="449">A queue change and its event are saved together in one database transaction.</text>
+
+  <text class="group" x="48" y="533">STANDALONE REPORTING</text>
+  <rect class="box" x="775" y="555" width="353" height="93" rx="12"/>
+  <text class="name" x="798" y="589">MySQL reporting views</text>
+  <text class="body" x="798" y="621">Lifecycle, wait times and counters</text>
+  <rect class="box" x="382" y="555" width="316" height="93" rx="12"/>
+  <text class="name" x="404" y="589">Power BI Desktop</text>
+  <text class="body" x="404" y="621">Imports a snapshot on refresh</text>
+  <path class="arrow" d="M1100 370V555"/>
+  <path class="arrow" d="M775 601H698"/>
+  <text class="body" x="736" y="585" text-anchor="middle">read</text>
+  <text class="body" x="48" y="692">Website updates via the API. The Power BI report reads MySQL through a separate reporting account.</text>
+</svg>

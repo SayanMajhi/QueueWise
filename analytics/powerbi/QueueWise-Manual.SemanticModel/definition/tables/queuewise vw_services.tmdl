@@ -1,0 +1,37 @@
+table 'queuewise vw_services'
+	lineageTag: ce929537-45e7-4792-b870-bf358e88d7f8
+
+	column service_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a54a4744-d426-4e2b-9495-fa902271a6c1
+		summarizeBy: none
+		sourceColumn: service_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_code
+		dataType: string
+		lineageTag: 734e584c-4e80-43f6-9086-f75c290a620f
+		summarizeBy: none
+		sourceColumn: service_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_name
+		dataType: string
+		lineageTag: d80aa01e-3fa8-42cf-b285-81d0b6fe90ec
+		summarizeBy: none
+		sourceColumn: service_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'queuewise vw_services' = m
+		mode: import
+		source =
+				let
+				    Source = MySQL.Database("127.0.0.1:3307", "queuewise", [ReturnSingleDatabase=true]),
+				    queuewise_vw_services = Source{[Schema="queuewise",Item="vw_services"]}[Data]
+				in
+				    queuewise_vw_services
+

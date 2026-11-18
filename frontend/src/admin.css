@@ -1,0 +1,253 @@
+.admin-dashboard {
+    --admin-wash: #f6f7fa;
+    gap: 24px;
+}
+
+.admin-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 22px;
+}
+
+.admin-summary-group h2 {
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 720;
+}
+
+.admin-metrics {
+    display: grid;
+    grid-template-columns: repeat(var(--admin-tile-count), minmax(0, 1fr));
+    gap: 10px;
+}
+
+.admin-tile {
+    min-width: 0;
+    display: grid;
+    align-content: start;
+    gap: 11px;
+    min-height: 118px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.admin-tile dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    color: #59677a;
+    font-size: 12px;
+    font-weight: 660;
+    line-height: 1.25;
+}
+
+.admin-tile-icon,
+.admin-report-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    color: #3b59ae;
+    background: #edf1fc;
+}
+
+.admin-tile-waiting .admin-tile-icon {
+    color: #805111;
+    background: #fff1d9;
+}
+
+.admin-tile-called .admin-tile-icon {
+    color: #315a84;
+    background: #e8f1fb;
+}
+
+.admin-tile dd {
+    margin: 0;
+    color: #172c53;
+    font-size: clamp(24px, 2.5vw, 35px);
+    font-weight: 760;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.045em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.admin-jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 5px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+}
+
+.admin-jump-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #4b5f81;
+    font-size: 13px;
+    font-weight: 680;
+    text-decoration: none;
+}
+
+.admin-jump-nav a:hover {
+    background: #edf1fc;
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.admin-anchor {
+    min-width: 0;
+    scroll-margin-block-start: 20px;
+}
+
+.admin-anchor:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+    border-radius: 14px;
+}
+
+.admin-management-grid {
+    display: grid;
+    gap: 20px;
+    align-items: start;
+}
+
+.admin-editor {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #f8f9fc;
+}
+
+.admin-table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.admin-table {
+    min-width: 30rem;
+}
+
+.admin-services-table {
+    min-width: 43rem;
+}
+
+.admin-table thead {
+    color: #35545a;
+    background: var(--admin-wash);
+}
+
+.admin-table tbody tr:focus-within,
+.admin-table tbody tr:hover {
+    background: #f8faff;
+}
+
+.admin-table th,
+.admin-table td {
+    vertical-align: middle;
+    padding: 11px 12px;
+}
+
+.admin-table .admin-row-title {
+    color: var(--text);
+    font-weight: 720;
+    overflow-wrap: anywhere;
+}
+
+.admin-table span.admin-row-title,
+.admin-table .admin-row-meta {
+    display: block;
+}
+
+.admin-row-meta {
+    margin-top: 3px;
+    color: #516b70;
+    font-size: 11px;
+    font-weight: 530;
+}
+
+.admin-services-table th:nth-child(n+3):nth-child(-n+6),
+.admin-services-table td:nth-child(n+3):nth-child(-n+6) {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-table .actions {
+    gap: 3px;
+}
+
+.admin-report-icon {
+    width: 40px;
+    height: 40px;
+}
+
+@media (max-width: 1179px) {
+    .admin-summary {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-dashboard {
+        gap: 18px;
+    }
+
+    .admin-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-tile {
+        min-height: 98px;
+        padding: 12px;
+        gap: 9px;
+    }
+}
+
+@media (min-width: 1480px) {
+    .admin-management-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Group related measurements without treating each number as a separate card. */
+.admin-metrics {
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--surface);
+}
+.admin-tile {
+    min-height: 110px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.admin-tile + .admin-tile { border-left: 1px solid var(--line); }
+.admin-jump-nav {
+    padding: 0 0 8px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+}
+@media (max-width: 600px) {
+    .admin-tile { min-height: 96px; }
+    .admin-tile:nth-child(odd) { border-left: 0; }
+    .admin-tile:nth-child(n+3) { border-top: 1px solid var(--line); }
+}

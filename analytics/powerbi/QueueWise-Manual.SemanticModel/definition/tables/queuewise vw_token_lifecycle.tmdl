@@ -1,0 +1,293 @@
+table 'queuewise vw_token_lifecycle'
+	lineageTag: d9ce6480-b05e-4c41-bfaa-00aa6357f1d3
+
+	measure 'Total Tokens' = COUNTROWS('queuewise vw_token_lifecycle')
+		formatString: 0
+		lineageTag: 633a0cbe-e7e3-497e-871e-b9ad16ec234e
+
+	measure 'Completed Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "COMPLETED"
+			)
+		formatString: 0
+		lineageTag: e90f07cf-ad98-46bc-aedb-6f5869456759
+
+	measure Measure
+		lineageTag: 8c4d9cd9-05a9-4eb5-9280-1e15d666e287
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'Completion Rate' =
+			
+			DIVIDE([Completed Tokens], [Total Tokens], 0)
+		lineageTag: d3f51ab7-514c-48a2-a038-0ad8a2ec1737
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Wait Minutes' =
+			
+			DIVIDE(
+			    AVERAGE('queuewise vw_token_lifecycle'[wait_seconds]),
+			    60
+			)
+		lineageTag: 9d69bb96-0845-45e2-aefd-eb8fe87454d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Service Minutes' =
+			
+			DIVIDE(
+			    AVERAGE('queuewise vw_token_lifecycle'[handling_seconds]),
+			    60
+			)
+		lineageTag: 2dfdce43-0cb8-4961-80ac-5a5293a464fc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cancelled Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "CANCELLED"
+			)
+		formatString: 0
+		lineageTag: 65961234-937b-41ac-8c2a-de486819815b
+
+	measure 'Skipped Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "SKIPPED"
+			)
+		formatString: 0
+		lineageTag: a47c5c9d-47e2-432b-8b02-132f71dd4dff
+
+	measure 'No-Show Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "NO_SHOW"
+			)
+		formatString: 0
+		lineageTag: 42aa270d-0665-4a0a-a82b-b38296b28ce7
+
+	measure 'Waiting Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "WAITING"
+			)
+		formatString: 0
+		lineageTag: a090e562-78f4-47f3-bff8-7f08222ccd34
+
+	measure 'Called Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "CALLED"
+			)
+		formatString: 0
+		lineageTag: bf758978-9002-4c1e-84b6-082b31b9a36f
+
+	measure 'In-Service Tokens' =
+			
+			CALCULATE(
+			    [Total Tokens],
+			    'queuewise vw_token_lifecycle'[status] = "IN_SERVICE"
+			)
+		formatString: 0
+		lineageTag: 6380ee29-0068-40bd-9f85-1a647585780a
+
+	column token_id
+		dataType: string
+		lineageTag: 5768cdd1-96dc-4bc5-81f7-56cdfbd6bda4
+		summarizeBy: none
+		sourceColumn: token_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1eb11e26-5cb1-47af-b563-bbe39ff966d6
+		summarizeBy: none
+		sourceColumn: service_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column counter_id
+		dataType: int64
+		formatString: 0
+		lineageTag: cc10396a-ac24-4bf1-b0c6-ea3a37d863eb
+		summarizeBy: sum
+		sourceColumn: counter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column queue_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e8176fea-ec18-4da3-be50-7424ba6cb06e
+		summarizeBy: none
+		sourceColumn: queue_date
+
+		variation Variation
+			isDefault
+			relationship: 345a983a-2c52-45f6-a398-fe95e94655c1
+			defaultHierarchy: LocalDateTable_c52a0edf-8d3d-4eab-957d-d9247257700d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column arrival_hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fc7d5c4-6853-401b-893a-f937159280f5
+		summarizeBy: sum
+		sourceColumn: arrival_hour
+
+		annotation SummarizationSetBy = Automatic
+
+	column issued_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 59711860-1ad7-4422-bf84-064d9bad2a87
+		summarizeBy: none
+		sourceColumn: issued_at
+
+		variation Variation
+			isDefault
+			relationship: e54a314e-3fe8-4306-93ae-aab64da419b8
+			defaultHierarchy: LocalDateTable_68848062-8dcb-407c-84ff-756feb60abaf.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column called_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 75bf38c6-9296-4d3c-ba7a-990c41b2baa4
+		summarizeBy: none
+		sourceColumn: called_at
+
+		variation Variation
+			isDefault
+			relationship: e92213bb-9c15-441b-b475-0422e58ad6a0
+			defaultHierarchy: LocalDateTable_fa224460-43d1-4cae-ad62-c0f60fb7dbc0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column started_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5218a3f8-7d7c-4061-9bd8-accb17ea2641
+		summarizeBy: none
+		sourceColumn: started_at
+
+		variation Variation
+			isDefault
+			relationship: 26654233-85d7-4ee5-b76f-12e86cc6c3fd
+			defaultHierarchy: LocalDateTable_7d34d943-f285-4845-a752-3f3b911ca115.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column completed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b584e54e-e43b-4c71-bbdc-35f68c7ca87a
+		summarizeBy: none
+		sourceColumn: completed_at
+
+		variation Variation
+			isDefault
+			relationship: a8105771-008a-4f36-a69f-d1b797d3b65b
+			defaultHierarchy: LocalDateTable_d08dc748-a021-425a-91a7-2b900c3ccef2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column closed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8b1e9c29-eecf-40bd-b236-b860d002d779
+		summarizeBy: none
+		sourceColumn: closed_at
+
+		variation Variation
+			isDefault
+			relationship: 4a285c49-c6a0-43b6-922a-abac75c3352e
+			defaultHierarchy: LocalDateTable_040765b5-9fed-4c58-a3f8-29dcf5673c93.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column completion_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a8aec4be-8b31-4d1c-ba4d-533cec167b51
+		summarizeBy: none
+		sourceColumn: completion_date
+
+		variation Variation
+			isDefault
+			relationship: 6108a17a-5786-4682-a294-e4958ead699a
+			defaultHierarchy: LocalDateTable_a4b318e7-9fbf-4980-a4b9-2d43765999db.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column status
+		dataType: string
+		lineageTag: 7fb492f2-8c94-4d9c-9385-1f91f5d5b46e
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column wait_seconds
+		dataType: double
+		lineageTag: 33bb0388-00ca-457f-97b6-277a2a44a6b9
+		summarizeBy: sum
+		sourceColumn: wait_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column handling_seconds
+		dataType: double
+		lineageTag: 01101701-cac3-4132-81bf-01dc9d8dbd1e
+		summarizeBy: sum
+		sourceColumn: handling_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column estimate_seconds
+		dataType: int64
+		formatString: 0
+		lineageTag: 97fad1dd-2a47-46f1-bef7-9c347bca09b7
+		summarizeBy: sum
+		sourceColumn: estimate_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimate_basis
+		dataType: string
+		lineageTag: 3086da34-d5aa-4761-8b58-69c46e1dc43f
+		summarizeBy: none
+		sourceColumn: estimate_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'queuewise vw_token_lifecycle' = m
+		mode: import
+		source =
+				let
+				    Source = MySQL.Database("127.0.0.1:3307", "queuewise", [ReturnSingleDatabase=true]),
+				    queuewise_vw_token_lifecycle = Source{[Schema="queuewise",Item="vw_token_lifecycle"]}[Data]
+				in
+				    queuewise_vw_token_lifecycle
+

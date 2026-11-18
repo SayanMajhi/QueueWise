@@ -1,0 +1,50 @@
+// Paste each definition into its own New measure entry.
+
+// Home table: Tokens. Date filters select the token's issuance date.
+Tokens Issued =
+COALESCE(COUNTROWS(Tokens), 0)
+
+Tokens Completed =
+CALCULATE([Tokens Issued], KEEPFILTERS(Tokens[status] = "COMPLETED"))
+
+Completion Rate =
+DIVIDE([Tokens Completed], [Tokens Issued])
+
+Wait Samples =
+COALESCE(COUNT(Tokens[wait_seconds]), 0)
+
+Average Wait Minutes =
+DIVIDE(AVERAGE(Tokens[wait_seconds]), 60)
+
+P90 Wait Minutes =
+VAR Samples = [Wait Samples]
+VAR CalledTokens = FILTER(Tokens, NOT ISBLANK(Tokens[wait_seconds]))
+RETURN
+    SWITCH(
+        Samples,
+        0, BLANK(),
+        1, DIVIDE(MIN(Tokens[wait_seconds]), 60),
+        DIVIDE(PERCENTILEX.INC(CalledTokens, Tokens[wait_seconds], 0.90), 60)
+    )
+
+Average Service Minutes =
+DIVIDE(AVERAGE(Tokens[handling_seconds]), 60)
+
+Handling Samples =
+COALESCE(COUNT(Tokens[handling_seconds]), 0)
+
+// Home table: CounterDays. Date filters select the counter's working date.
+Counter Completed Tokens =
+COALESCE(SUM(CounterDays[completed_tokens]), 0)
+
+Counter Utilization =
+DIVIDE(SUM(CounterDays[busy_seconds]), SUM(CounterDays[staffed_seconds]))
+
+Counter Average Handling Minutes =
+DIVIDE(SUM(CounterDays[handling_seconds]), 60 * [Counter Completed Tokens])
+
+Staffed Hours =
+DIVIDE(SUM(CounterDays[staffed_seconds]), 3600)
+
+Busy Hours =
+DIVIDE(SUM(CounterDays[busy_seconds]), 3600)

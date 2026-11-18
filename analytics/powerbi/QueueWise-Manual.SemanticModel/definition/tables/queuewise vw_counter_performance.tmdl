@@ -1,0 +1,104 @@
+table 'queuewise vw_counter_performance'
+	lineageTag: 2d3ce5d6-4a53-439b-a3c8-0d4819ec8dea
+
+	measure 'Counter Completed Tokens' =
+			
+			COALESCE(
+			    SUM('queuewise vw_counter_performance'[completed_tokens]),
+			    0
+			)
+		formatString: 0
+		lineageTag: 39306bb0-bf21-4fa8-97a2-0d66fec03aac
+
+	measure 'Counter Utilization' =
+			
+			DIVIDE(
+			    SUM('queuewise vw_counter_performance'[busy_seconds]),
+			    SUM('queuewise vw_counter_performance'[staffed_seconds])
+			)
+		lineageTag: 74aae82c-a9ee-4c58-8317-639f84e28787
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column counter_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cfb1d64-0137-4514-aceb-6791354fcfd9
+		summarizeBy: sum
+		sourceColumn: counter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ae3b5678-2c68-470a-bc87-7bdb43cd85b1
+		summarizeBy: none
+		sourceColumn: service_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column work_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0fd8a1fa-51c0-4e60-8589-a9307eaaba33
+		summarizeBy: none
+		sourceColumn: work_date
+
+		variation Variation
+			isDefault
+			relationship: 6aeb6cd0-6b5e-4a43-b39b-50a7d391cb17
+			defaultHierarchy: LocalDateTable_3743acc9-2aec-4472-bd78-36c1501f31a2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column staffed_seconds
+		dataType: double
+		lineageTag: 16e2c53b-468b-41b1-a531-d602f1a06354
+		summarizeBy: sum
+		sourceColumn: staffed_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column busy_seconds
+		dataType: double
+		lineageTag: 05cb8711-6871-4a63-8c8c-afa09dd29111
+		summarizeBy: sum
+		sourceColumn: busy_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column completed_tokens
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b30fef1-c0e9-436e-a6c3-81b5916aaa8c
+		summarizeBy: sum
+		sourceColumn: completed_tokens
+
+		annotation SummarizationSetBy = Automatic
+
+	column handling_seconds
+		dataType: double
+		lineageTag: 5395bf6f-fa3b-4d9a-8881-103bea10b70c
+		summarizeBy: sum
+		sourceColumn: handling_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'queuewise vw_counter_performance' = m
+		mode: import
+		source =
+				let
+				    Source = MySQL.Database("127.0.0.1:3307", "queuewise", [ReturnSingleDatabase=true]),
+				    queuewise_vw_counter_performance = Source{[Schema="queuewise",Item="vw_counter_performance"]}[Data]
+				in
+				    queuewise_vw_counter_performance
+

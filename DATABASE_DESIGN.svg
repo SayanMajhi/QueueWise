@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">QueueWise database design</title>
+  <desc id="desc">The core MySQL tables for campus services, counters, users and queue tokens. Tokens link to a queue session, a student, an optional counter, and a history of events.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#716b60"/></marker>
+  </defs>
+  <style>
+    text{font-family:Inter,Arial,sans-serif;fill:#211f1b}
+    .kicker{font-size:16px;font-weight:700;letter-spacing:2px;fill:#f0c928}
+    .title{font-size:42px;font-weight:700;fill:#fffdfa}
+    .intro{font-size:18px;fill:#625c52}
+    .box{fill:#fffdfa;stroke:#d8cebd;stroke-width:2}
+    .keybox{fill:#fff8dd;stroke:#aa8424;stroke-width:2}
+    .name{font-size:20px;font-weight:700}
+    .field{font-family:Consolas,monospace;font-size:16px;fill:#625c52}
+    .edge{fill:none;stroke:#716b60;stroke-width:2;marker-end:url(#arrow)}
+    .label{font-size:14px;font-weight:700;fill:#625c52}
+    .note{font-size:16px;fill:#625c52}
+  </style>
+  <rect width="1200" height="720" fill="#f6f1e9"/>
+  <path d="M0 0h1200v122H0z" fill="#171715"/>
+  <text class="kicker" x="48" y="43">QUEUEWISE / MYSQL 8.4</text>
+  <text class="title" x="48" y="93">Database design</text>
+  <text class="intro" x="48" y="158">One token records the visit. Its event rows record each change in status.</text>
+
+  <path class="edge" d="M258 265 H301"/>
+  <text class="label" x="279" y="251" text-anchor="middle">1:N</text>
+  <path class="edge" d="M530 265 H600 V340 H642"/>
+  <text class="label" x="571" y="251" text-anchor="middle">1:N</text>
+  <path class="edge" d="M152 320 V403"/>
+  <text class="label" x="167" y="366">1:N</text>
+  <path class="edge" d="M258 430 H277 V362 H642"/>
+  <text class="label" x="467" y="351">counter optional</text>
+  <path class="edge" d="M530 488 H600 V410 H642"/>
+  <text class="label" x="573" y="478" text-anchor="middle">1:N</text>
+  <path class="edge" d="M416 538 V584"/>
+  <text class="label" x="430" y="567">1:0–1</text>
+  <path class="edge" d="M891 380 H950"/>
+  <text class="label" x="920" y="366" text-anchor="middle">1:N</text>
+  <path class="edge" d="M258 497 H287 V625 H301"/>
+  <text class="label" x="269" y="603" text-anchor="end">1:N</text>
+  <path class="edge" d="M503 538 V557 H1050 V459"/>
+  <text class="label" x="807" y="547">user performs event</text>
+
+  <rect class="box" x="48" y="210" width="210" height="110" rx="12"/>
+  <text class="name" x="68" y="241">services</text>
+  <text class="field" x="68" y="271">id (PK), code</text>
+  <text class="field" x="68" y="296">accepts_tokens</text>
+
+  <rect class="box" x="301" y="210" width="229" height="110" rx="12"/>
+  <text class="name" x="321" y="241">queue_sessions</text>
+  <text class="field" x="321" y="271">id (PK), service_id</text>
+  <text class="field" x="321" y="296">queue_date</text>
+
+  <rect class="box" x="48" y="403" width="210" height="135" rx="12"/>
+  <text class="name" x="68" y="434">counters</text>
+  <text class="field" x="68" y="464">id (PK), code</text>
+  <text class="field" x="68" y="487">service_id (FK)</text>
+  <text class="field" x="68" y="510">status</text>
+
+  <rect class="box" x="301" y="403" width="229" height="135" rx="12"/>
+  <text class="name" x="321" y="434">users</text>
+  <text class="field" x="321" y="464">id (PK), login, role</text>
+  <text class="note" x="321" y="497">Student, Staff, Admin</text>
+
+  <rect class="box" x="301" y="584" width="229" height="73" rx="12"/>
+  <text class="name" x="321" y="614">staff_assignments</text>
+  <text class="field" x="321" y="638">staff_id, counter_id</text>
+
+  <rect class="keybox" x="642" y="297" width="249" height="162" rx="12"/>
+  <text class="name" x="662" y="330">tokens</text>
+  <text class="field" x="662" y="359">id (PK), status</text>
+  <text class="field" x="662" y="384">student_id, counter_id</text>
+  <text class="field" x="662" y="409">queue_session_id</text>
+  <text class="field" x="662" y="434">service_id, sequence</text>
+
+  <rect class="box" x="950" y="297" width="202" height="162" rx="12"/>
+  <text class="name" x="970" y="330">token_events</text>
+  <text class="field" x="970" y="359">id (PK), token_id</text>
+  <text class="field" x="970" y="384">actor_id</text>
+  <text class="field" x="970" y="409">to_status</text>
+  <text class="field" x="970" y="434">event_at</text>
+
+  <text class="note" x="48" y="691">Simplified ER diagram. 1:N = one to many. PK = primary key. FK = foreign key.</text>
+</svg>

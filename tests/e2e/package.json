@@ -1,0 +1,16 @@
+{
+  "name": "queuewise-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "install:chromium": "playwright-core install chromium",
+    "test": "node --test smoke.test.js"
+  },
+  "devDependencies": {
+    "playwright-core": "1.65.1"
+  }
+}

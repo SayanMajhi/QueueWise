@@ -1,0 +1,22 @@
+{
+  "name": "QueueWise Campus Operations",
+  "dataColors": [
+    "#253979",
+    "#D7AA24",
+    "#2D806B",
+    "#8E5EA2",
+    "#C9784B",
+    "#547FAD",
+    "#748B53",
+    "#9E5C61"
+  ],
+  "background": "#FAF9F6",
+  "foreground": "#23282F",
+  "tableAccent": "#253979",
+  "good": "#2D806B",
+  "neutral": "#D7AA24",
+  "bad": "#B95858",
+  "minimum": "#E9EDF6",
+  "center": "#A5B6D6",
+  "maximum": "#253979"
+}

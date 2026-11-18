@@ -1,0 +1,690 @@
+{
+  "compatibilityLevel": 1606,
+  "model": {
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Services\",\"Counters\",\"Tokens\",\"CounterDays\",\"Calendar\",\"QueueWiseServer\",\"QueueWiseDatabase\"]"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-IN",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "QueueWiseServer",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "expression": "\"127.0.0.1:3307\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "kind": "m",
+        "lineageTag": "43cb9095-d9cd-451f-9956-839ba12fb585"
+      },
+      {
+        "name": "QueueWiseDatabase",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "expression": "\"queuewise\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "kind": "m",
+        "lineageTag": "cf8a7737-50ef-460a-9e1d-61ce208e456c"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "Tokens_Service",
+        "fromColumn": "service_id",
+        "fromTable": "Tokens",
+        "toColumn": "service_id",
+        "toTable": "Services"
+      },
+      {
+        "name": "Tokens_IssueDate",
+        "fromColumn": "queue_date",
+        "fromTable": "Tokens",
+        "toColumn": "Date",
+        "toTable": "Calendar"
+      },
+      {
+        "name": "Counters_Service",
+        "fromColumn": "service_id",
+        "fromTable": "Counters",
+        "toColumn": "service_id",
+        "toTable": "Services"
+      },
+      {
+        "name": "CounterDays_Counter",
+        "fromColumn": "counter_id",
+        "fromTable": "CounterDays",
+        "toColumn": "counter_id",
+        "toTable": "Counters"
+      },
+      {
+        "name": "CounterDays_WorkDate",
+        "fromColumn": "work_date",
+        "fromTable": "CounterDays",
+        "toColumn": "Date",
+        "toTable": "Calendar"
+      }
+    ],
+    "sourceQueryCulture": "en-IN",
+    "tables": [
+      {
+        "name": "Services",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "service_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "753d57c5-71e0-4f6a-acb7-b28c32f57cc0",
+            "sourceColumn": "service_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_code",
+            "dataType": "string",
+            "lineageTag": "a84c34c0-da9c-401e-85ae-1fbb6057411a",
+            "sourceColumn": "service_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_name",
+            "dataType": "string",
+            "lineageTag": "1037b9bd-9c33-4801-82dd-cf0c8d47cd2b",
+            "sourceColumn": "service_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Service Label",
+            "dataType": "string",
+            "lineageTag": "16347f8b-efe9-4955-b36c-be0f411e9c47",
+            "sourceColumn": "Service Label",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "ebbbba94-d1a6-4e29-bbbc-7b469f0687ee",
+        "partitions": [
+          {
+            "name": "Services",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    View = MySQL.Database(QueueWiseServer, QueueWiseDatabase, [Query = \"SELECT * FROM vw_services\"]),",
+                "    Typed = Table.TransformColumnTypes(View, {{\"service_id\", Int64.Type}}),",
+                "    Labels = Table.AddColumn(Typed, \"Service Label\", each [service_name] & \" (\" & [service_code] & \")\", type text)",
+                "in",
+                "    Labels"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Counters",
+        "columns": [
+          {
+            "name": "counter_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "b75603af-40c8-4f8d-9c5e-b4eba3198075",
+            "sourceColumn": "counter_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "be26953e-ae4a-414f-b860-1bcfc647b703",
+            "sourceColumn": "service_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "counter_code",
+            "dataType": "string",
+            "lineageTag": "c070f4b8-6d7e-481c-80c6-4ed8db84ca8e",
+            "sourceColumn": "counter_code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "counter_name",
+            "dataType": "string",
+            "lineageTag": "fbf56753-51bb-4651-81bf-9498fb0aa16b",
+            "sourceColumn": "counter_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Counter Label",
+            "dataType": "string",
+            "lineageTag": "10ab009c-3ddf-4f97-bf3e-0aa653fc2449",
+            "sourceColumn": "Counter Label",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "8cf7196e-fab6-4656-96df-7abca5a55793",
+            "sourceColumn": "service_code",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "70192b70-1ca3-4f4a-9b9b-772e051ad4c3",
+        "partitions": [
+          {
+            "name": "Counters",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    View = MySQL.Database(QueueWiseServer, QueueWiseDatabase, [Query = \"SELECT * FROM vw_counters\"]),",
+                "    Typed = Table.TransformColumnTypes(View, {{\"counter_id\", Int64.Type}, {\"service_id\", Int64.Type}}),",
+                "    Joined = Table.NestedJoin(Typed, {\"service_id\"}, Services, {\"service_id\"}, \"Service\", JoinKind.LeftOuter),",
+                "    ServiceCode = Table.ExpandTableColumn(Joined, \"Service\", {\"service_code\"}),",
+                "    Labels = Table.AddColumn(ServiceCode, \"Counter Label\", each [counter_name] & \" (\" & [service_code] & \" / \" & [counter_code] & \")\", type text)",
+                "in",
+                "    Labels"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Tokens",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "token_id",
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "b8b66a81-2adc-4504-bd58-6b21858f4f12",
+            "sourceColumn": "token_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "445e8953-25ac-4435-be64-caeb76b9d9af",
+            "sourceColumn": "service_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "counter_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "952e8948-abf3-4aca-bc19-3de506b27372",
+            "sourceColumn": "counter_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "queue_date",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "isHidden": true,
+            "lineageTag": "52b8b324-6616-4208-b53a-18d02b950250",
+            "sourceColumn": "queue_date",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "completion_date",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "isHidden": true,
+            "lineageTag": "0c9e015c-ee2c-4ab9-be1e-0349aac51a4a",
+            "sourceColumn": "completion_date",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "arrival_hour",
+            "dataType": "int64",
+            "lineageTag": "6d4353f3-d152-4aff-b0b9-96768c00063d",
+            "sourceColumn": "arrival_hour",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "estimate_seconds",
+            "dataType": "int64",
+            "lineageTag": "ff618b13-f3e9-4344-92d5-29084117bc00",
+            "sourceColumn": "estimate_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "status",
+            "dataType": "string",
+            "lineageTag": "7dea2cec-1c73-4167-8457-af98c6772ead",
+            "sourceColumn": "status",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "estimate_basis",
+            "dataType": "string",
+            "lineageTag": "bcc3f50a-cab8-495e-a82e-7d2543bfe689",
+            "sourceColumn": "estimate_basis",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "wait_seconds",
+            "dataType": "double",
+            "isHidden": true,
+            "lineageTag": "2aeced22-1254-4661-a27f-84fa7bd2c2a5",
+            "sourceColumn": "wait_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "handling_seconds",
+            "dataType": "double",
+            "isHidden": true,
+            "lineageTag": "4aa8ce5e-1f94-4040-af67-ba496c098206",
+            "sourceColumn": "handling_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "handling_band",
+            "dataType": "string",
+            "lineageTag": "dc469856-0441-4860-bd8e-d1d4c49427b4",
+            "sortByColumn": "handling_band_order",
+            "sourceColumn": "handling_band",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "handling_band_order",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "9af86256-82b5-48ef-b3df-846a421157f7",
+            "sourceColumn": "handling_band_order",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "issued_at",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "adb9278f-a11c-402d-a624-62b7bc99b179",
+            "sourceColumn": "issued_at",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "called_at",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "73d8f162-88d2-4dda-b3a9-95bdfdb8a80e",
+            "sourceColumn": "called_at",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "started_at",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "51b9cae8-5c24-4c10-a145-d0967faffbf8",
+            "sourceColumn": "started_at",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "completed_at",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "c6d7607d-fa2c-43b1-bae5-885700ab560a",
+            "sourceColumn": "completed_at",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "closed_at",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "685bdac6-7b3e-43d1-abeb-4c7fa5210567",
+            "sourceColumn": "closed_at",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "c60c3c70-69ab-44ac-bbfb-d0e43c4dc158",
+        "measures": [
+          {
+            "name": "Tokens Issued",
+            "expression": "COALESCE(COUNTROWS(Tokens), 0)",
+            "formatString": "#,0",
+            "lineageTag": "49c1f5b6-abe4-4265-961e-4dc17459156f"
+          },
+          {
+            "name": "Tokens Completed",
+            "expression": "CALCULATE([Tokens Issued], KEEPFILTERS(Tokens[status] = \"COMPLETED\"))",
+            "formatString": "#,0",
+            "lineageTag": "26bc3cc3-f151-42ef-a847-22a66bbc4760"
+          },
+          {
+            "name": "Completion Rate",
+            "expression": "DIVIDE([Tokens Completed], [Tokens Issued])",
+            "formatString": "0.0%",
+            "lineageTag": "4166fb99-e74f-4261-bf4d-ebe38924d9f4"
+          },
+          {
+            "name": "Wait Samples",
+            "expression": "COALESCE(COUNT(Tokens[wait_seconds]), 0)",
+            "formatString": "#,0",
+            "lineageTag": "be824405-7b9c-4c42-be33-7f623cc48d42"
+          },
+          {
+            "name": "Average Wait Minutes",
+            "expression": "DIVIDE(AVERAGE(Tokens[wait_seconds]), 60)",
+            "formatString": "0.00",
+            "lineageTag": "a928b637-3d70-47db-b2b6-2959ff97ba5e"
+          },
+          {
+            "name": "P90 Wait Minutes",
+            "expression": "VAR Samples = [Wait Samples] VAR Observed = FILTER(Tokens, NOT ISBLANK(Tokens[wait_seconds])) RETURN SWITCH(Samples, 0, BLANK(), 1, DIVIDE(MIN(Tokens[wait_seconds]), 60), DIVIDE(PERCENTILEX.INC(Observed, Tokens[wait_seconds], 0.9), 60))",
+            "formatString": "0.00",
+            "lineageTag": "2e89b52d-8a44-481d-beb7-698ef3100d13"
+          },
+          {
+            "name": "Average Service Minutes",
+            "expression": "DIVIDE(AVERAGE(Tokens[handling_seconds]), 60)",
+            "formatString": "0.00",
+            "lineageTag": "37968aac-8754-4b37-abae-898c3d94f653"
+          },
+          {
+            "name": "Handling Samples",
+            "expression": "COUNT(Tokens[handling_seconds])",
+            "formatString": "#,0",
+            "lineageTag": "9e054a6c-9585-427a-82f0-eff611b41fda"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Tokens",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    View = MySQL.Database(QueueWiseServer, QueueWiseDatabase, [Query = \"SELECT * FROM vw_token_lifecycle\"]),",
+                "    Typed = Table.TransformColumnTypes(View, {{\"service_id\", Int64.Type}, {\"counter_id\", Int64.Type}, {\"arrival_hour\", Int64.Type}, {\"estimate_seconds\", Int64.Type}, {\"queue_date\", type date}, {\"completion_date\", type date}, {\"wait_seconds\", type number}, {\"handling_seconds\", type number}}),",
+                "    BandOrder = Table.AddColumn(Typed, \"handling_band_order\", each",
+                "        if [handling_seconds] = null then null else if [handling_seconds] < 120 then 1",
+                "        else if [handling_seconds] < 240 then 2 else if [handling_seconds] < 360 then 3 else 4, Int64.Type),",
+                "    Bands = Table.AddColumn(BandOrder, \"handling_band\", each",
+                "        if [handling_band_order] = null then null",
+                "        else {\"Under 2 min\", \"2–<4 min\", \"4–<6 min\", \"6 min or more\"}{[handling_band_order] - 1}, type text)",
+                "in",
+                "    Bands"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "CounterDays",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "counter_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "b611be01-5364-43e9-a880-bd7baa05beab",
+            "sourceColumn": "counter_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "service_id",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "7ea2af3f-78ad-43d7-8d29-02bd01cfd980",
+            "sourceColumn": "service_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "work_date",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "isHidden": true,
+            "lineageTag": "893f3225-2a79-4912-9aed-3da7dde2966e",
+            "sourceColumn": "work_date",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "staffed_seconds",
+            "dataType": "double",
+            "isHidden": true,
+            "lineageTag": "5ae05bd8-66a7-445d-b496-3545fd1e085a",
+            "sourceColumn": "staffed_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "busy_seconds",
+            "dataType": "double",
+            "isHidden": true,
+            "lineageTag": "8d5f04ec-4439-4c03-a8ba-5a2f0421eae3",
+            "sourceColumn": "busy_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "handling_seconds",
+            "dataType": "double",
+            "isHidden": true,
+            "lineageTag": "4411012e-118a-48ce-a44f-206bb1f1779c",
+            "sourceColumn": "handling_seconds",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "completed_tokens",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "440af0fd-8282-48a1-9cc0-7a6989ea1742",
+            "sourceColumn": "completed_tokens",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "bee5ff9e-b2a6-4abe-9c0e-ee901235f784",
+        "measures": [
+          {
+            "name": "Counter Completed Tokens",
+            "expression": "COALESCE(SUM(CounterDays[completed_tokens]), 0)",
+            "formatString": "#,0",
+            "lineageTag": "82b4bc45-6615-4deb-8225-48e717227bbc"
+          },
+          {
+            "name": "Counter Utilization",
+            "expression": "DIVIDE(SUM(CounterDays[busy_seconds]), SUM(CounterDays[staffed_seconds]))",
+            "formatString": "0.0%",
+            "lineageTag": "f6bb8886-de40-4535-b8aa-2c630f1a30c0"
+          },
+          {
+            "name": "Counter Average Handling Minutes",
+            "expression": "DIVIDE(DIVIDE(SUM(CounterDays[handling_seconds]), [Counter Completed Tokens]), 60)",
+            "formatString": "0.00",
+            "lineageTag": "5df074e6-54f1-47a3-90e5-3155121e0c01"
+          },
+          {
+            "name": "Staffed Hours",
+            "expression": "DIVIDE(SUM(CounterDays[staffed_seconds]), 3600)",
+            "formatString": "0.00",
+            "lineageTag": "f44d6902-0b9f-4c38-b95e-a38283ab020e"
+          },
+          {
+            "name": "Busy Hours",
+            "expression": "DIVIDE(SUM(CounterDays[busy_seconds]), 3600)",
+            "formatString": "0.00",
+            "lineageTag": "9a520df3-bf4a-4789-8df6-3cd5f3ad2978"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CounterDays",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    View = MySQL.Database(QueueWiseServer, QueueWiseDatabase, [Query = \"SELECT * FROM vw_counter_performance\"]),",
+                "    Typed = Table.TransformColumnTypes(View, {{\"counter_id\", Int64.Type}, {\"service_id\", Int64.Type}, {\"completed_tokens\", Int64.Type}, {\"work_date\", type date}, {\"staffed_seconds\", type number}, {\"busy_seconds\", type number}, {\"handling_seconds\", type number}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "isKey": true,
+            "lineageTag": "82f09acc-5675-4d86-8593-72cd4cdf2ba7",
+            "sourceColumn": "Date",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Week Start",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "lineageTag": "079fbb2d-a189-4acc-a887-3e958ee14815",
+            "sourceColumn": "Week Start",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Weekday",
+            "dataType": "string",
+            "lineageTag": "4f09ed48-c1bf-4e88-bfbf-9e9e400bc581",
+            "sortByColumn": "Weekday Number",
+            "sourceColumn": "Weekday",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Weekday Number",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "548d4cbd-61fb-4197-98b2-c36a58c1248d",
+            "sourceColumn": "Weekday Number",
+            "summarizeBy": "none"
+          }
+        ],
+        "dataCategory": "Time",
+        "lineageTag": "2ae27be6-2cd7-4468-80c5-f1ba3182b8ec",
+        "partitions": [
+          {
+            "name": "Calendar",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Today = Date.From(DateTimeZone.SwitchZone(DateTimeZone.FixedUtcNow(), 5, 30)),",
+                "    Observed = List.RemoveNulls(List.Combine({Tokens[queue_date], CounterDays[work_date]})),",
+                "    First = Date.StartOfYear(List.Min(Observed & {Today})),",
+                "    Last = Date.EndOfYear(List.Max(Observed & {Today})),",
+                "    Dates = Table.FromColumns({List.Dates(First, Duration.Days(Last - First) + 1, #duration(1, 0, 0, 0))}, {\"Date\"}),",
+                "    Typed = Table.TransformColumnTypes(Dates, {{\"Date\", type date}}),",
+                "    WeekStart = Table.AddColumn(Typed, \"Week Start\", each Date.StartOfWeek([Date], Day.Monday), type date),",
+                "    Weekday = Table.AddColumn(WeekStart, \"Weekday\", each Date.DayOfWeekName([Date], \"en-IN\"), type text),",
+                "    WeekdayNumber = Table.AddColumn(Weekday, \"Weekday Number\", each Date.DayOfWeek([Date], Day.Monday) + 1, Int64.Type)",
+                "in",
+                "    WeekdayNumber"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

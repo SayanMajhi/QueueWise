@@ -1,0 +1,46 @@
+table 'queuewise vw_counters'
+	lineageTag: a69b9e8b-cb08-4dfb-977c-14ae0c4c8777
+
+	column counter_id
+		dataType: int64
+		formatString: 0
+		lineageTag: c8d1628c-9f39-447f-afed-6db4d75cb6e2
+		summarizeBy: sum
+		sourceColumn: counter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d099908-d892-4c4f-82d2-de5776441355
+		summarizeBy: none
+		sourceColumn: service_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column counter_code
+		dataType: string
+		lineageTag: fb910973-1b87-493d-8f40-62a154d2e658
+		summarizeBy: none
+		sourceColumn: counter_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column counter_name
+		dataType: string
+		lineageTag: 05dd0aa7-e244-4433-a45f-abbe305adc1c
+		summarizeBy: none
+		sourceColumn: counter_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'queuewise vw_counters' = m
+		mode: import
+		source =
+				let
+				    Source = MySQL.Database("127.0.0.1:3307", "queuewise", [ReturnSingleDatabase=true]),
+				    queuewise_vw_counters = Source{[Schema="queuewise",Item="vw_counters"]}[Data]
+				in
+				    queuewise_vw_counters
+

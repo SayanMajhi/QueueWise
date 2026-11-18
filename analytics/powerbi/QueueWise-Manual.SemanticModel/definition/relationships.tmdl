@@ -1,0 +1,62 @@
+relationship 345a983a-2c52-45f6-a398-fe95e94655c1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.queue_date
+	toColumn: LocalDateTable_c52a0edf-8d3d-4eab-957d-d9247257700d.Date
+
+relationship e54a314e-3fe8-4306-93ae-aab64da419b8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.issued_at
+	toColumn: LocalDateTable_68848062-8dcb-407c-84ff-756feb60abaf.Date
+
+relationship e92213bb-9c15-441b-b475-0422e58ad6a0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.called_at
+	toColumn: LocalDateTable_fa224460-43d1-4cae-ad62-c0f60fb7dbc0.Date
+
+relationship 26654233-85d7-4ee5-b76f-12e86cc6c3fd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.started_at
+	toColumn: LocalDateTable_7d34d943-f285-4845-a752-3f3b911ca115.Date
+
+relationship a8105771-008a-4f36-a69f-d1b797d3b65b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.completed_at
+	toColumn: LocalDateTable_d08dc748-a021-425a-91a7-2b900c3ccef2.Date
+
+relationship 4a285c49-c6a0-43b6-922a-abac75c3352e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.closed_at
+	toColumn: LocalDateTable_040765b5-9fed-4c58-a3f8-29dcf5673c93.Date
+
+relationship 6108a17a-5786-4682-a294-e4958ead699a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_token_lifecycle'.completion_date
+	toColumn: LocalDateTable_a4b318e7-9fbf-4980-a4b9-2d43765999db.Date
+
+relationship 6aeb6cd0-6b5e-4a43-b39b-50a7d391cb17
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'queuewise vw_counter_performance'.work_date
+	toColumn: LocalDateTable_3743acc9-2aec-4472-bd78-36c1501f31a2.Date
+
+relationship AutoDetected_360d1465-d3c1-4144-b84d-aac9aa184df9
+	fromColumn: 'queuewise vw_counters'.service_id
+	toColumn: 'queuewise vw_services'.service_id
+
+relationship AutoDetected_586285b7-ce51-4f7c-9a12-59f375e8f98f
+	fromColumn: 'queuewise vw_token_lifecycle'.service_id
+	toColumn: 'queuewise vw_services'.service_id
+
+relationship AutoDetected_f18afaaf-8c90-4816-aed4-34020d5fa489
+	fromColumn: 'queuewise vw_counter_performance'.service_id
+	toColumn: 'queuewise vw_services'.service_id
+
+relationship AutoDetected_f2680f03-a29f-4617-b055-1bfd3032b2d9
+	isActive: false
+	fromColumn: 'queuewise vw_token_lifecycle'.counter_id
+	toColumn: 'queuewise vw_counters'.counter_id
+
+relationship AutoDetected_a38d568c-33e1-4c73-b154-573eccb67a38
+	isActive: false
+	fromColumn: 'queuewise vw_counter_performance'.counter_id
+	toColumn: 'queuewise vw_counters'.counter_id
+

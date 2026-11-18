@@ -1,0 +1,31 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["queuewise vw_services","queuewise vw_counters","queuewise vw_token_lifecycle","queuewise vw_counter_performance"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'queuewise vw_services'
+ref table 'queuewise vw_counters'
+ref table 'queuewise vw_token_lifecycle'
+ref table DateTableTemplate_86145578-3c09-420e-864b-3aece97fd504
+ref table LocalDateTable_c52a0edf-8d3d-4eab-957d-d9247257700d
+ref table LocalDateTable_68848062-8dcb-407c-84ff-756feb60abaf
+ref table LocalDateTable_fa224460-43d1-4cae-ad62-c0f60fb7dbc0
+ref table LocalDateTable_7d34d943-f285-4845-a752-3f3b911ca115
+ref table LocalDateTable_d08dc748-a021-425a-91a7-2b900c3ccef2
+ref table LocalDateTable_040765b5-9fed-4c58-a3f8-29dcf5673c93
+ref table LocalDateTable_a4b318e7-9fbf-4980-a4b9-2d43765999db
+ref table 'queuewise vw_counter_performance'
+ref table LocalDateTable_3743acc9-2aec-4472-bd78-36c1501f31a2
+
+ref cultureInfo en-US
+

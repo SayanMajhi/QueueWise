@@ -1,0 +1,27 @@
+// New table. Set its Date column to Date and mark this as the date table.
+Calendar =
+VAR ActivityDates =
+    FILTER(
+        UNION(
+            SELECTCOLUMNS(Tokens, "ActivityDate", Tokens[queue_date]),
+            SELECTCOLUMNS(CounterDays, "ActivityDate", CounterDays[work_date])
+        ),
+        NOT ISBLANK([ActivityDate])
+    )
+VAR FirstYear = YEAR(COALESCE(MINX(ActivityDates, [ActivityDate]), TODAY()))
+VAR LastYear = YEAR(COALESCE(MAXX(ActivityDates, [ActivityDate]), TODAY()))
+RETURN
+    ADDCOLUMNS(
+        CALENDAR(DATE(FirstYear, 1, 1), DATE(LastYear, 12, 31)),
+        "Week Start", [Date] - WEEKDAY([Date], 2) + 1,
+        "Weekday", FORMAT([Date], "ddd"),
+        "Weekday Number", WEEKDAY([Date], 2)
+    )
+
+// New column on Services.
+Service Label =
+Services[service_name] & " (" & Services[service_code] & ")"
+
+// New column on Counters, after creating the Services-to-Counters relationship.
+Counter Label =
+Counters[counter_name] & " (" & RELATED(Services[service_code]) & " / " & Counters[counter_code] & ")"
